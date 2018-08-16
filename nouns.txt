@@ -76,3 +76,4 @@ Sunfish
 Oarfish
 Orca
 Crustacean
+Octopus

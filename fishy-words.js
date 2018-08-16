@@ -2,9 +2,6 @@
 var ADJECTIVES = fetchAdjectives(),
 	NOUNS = fetchNouns(),
 	FISH_NAME = "";
-// yes this is definitely bad i'm sure. i hate it too.
-ADJECTIVES.then( result => ADJECTIVES=result);
-NOUNS.then( result => NOUNS=result);
 function fetchAdjectives() {
 	'use strict'
 	var adjectives = new Promise((resolve, reject) => {
@@ -67,23 +64,27 @@ function buildFishNameView(fishName) {
 	var fishNameView = document.createElement("div"),
 		nameSpan = document.createElement("span");
 	nameSpan.textContent = fishName;
-	fishNameView.classList.add("fish-name");
+	fishNameView.classList.add("fish-name", "flex-item--grow");
 	fishNameView.appendChild(nameSpan);
 	return fishNameView;
 }
-
+async function replaceFishNameView(keepAdjective1,keepAdjective2,keepNoun, oldView, oldNameArr) {
+	'use strict'
+	var adjective1 = (keepAdjective1) ? oldNameArr[0] : "",
+		adjective2 = (keepAdjective2) ? oldNameArr[1] : "",
+		noun = (keepNoun) ? oldNameArr[2] : "",
+		newName = getFishName(adjective1,adjective2,noun, await ADJECTIVES, await NOUNS),
+		newView = buildFishNameView(newName);
+	oldView.parentNode.replaceChild(newView, oldView);
+	FISH_NAME = newName;
+}
 document.getElementById("regen-button").addEventListener("click", () => {
 	'use strict'
 	var keepAdjective1 = document.getElementById("keep-adjective1").checked,
 	 	keepAdjective2 = document.getElementById("keep-adjective2").checked,
 		keepNoun = document.getElementById("keep-noun").checked,
 		oldView =  document.querySelector(".fish-name"),
-		oldNameArr = FISH_NAME.split(" "),
-		adjective1 = (keepAdjective1) ? oldNameArr[0] : "",
-		adjective2 = (keepAdjective2) ? oldNameArr[1] : "",
-		noun = (keepNoun) ? oldNameArr[2] : "",
-		newName = getFishName(adjective1,adjective2,noun, ADJECTIVES, NOUNS),
-		newView = buildFishNameView(newName);
-	oldView.parentNode.replaceChild(newView, oldView);
-	FISH_NAME = newName;
+		oldNameArr = FISH_NAME.split(" ");
+	replaceFishNameView(keepAdjective1, keepAdjective2, keepNoun, oldView,oldNameArr);
 });
+replaceFishNameView(false, false, false, document.querySelector(".fish-name"), "");
