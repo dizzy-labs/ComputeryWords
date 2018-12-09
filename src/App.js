@@ -33,7 +33,7 @@ class App extends Component {
 	}
 
 	async fetchAdjectives () {
-		let response = await fetch("https://raw.githubusercontent.com/dizzy-labs/FishyWords/master/adjectives.txt")
+		let response = await fetch("https://raw.githubusercontent.com/dizzy-labs/FishyWords/master/assets/wordlists/adjectives.txt")
 		let responseText = await response.text()
 		let adjectives = responseText.split("\n");
 		//trim off trailing blank lines
@@ -43,7 +43,7 @@ class App extends Component {
 		this.setState({"adjectives": adjectives})
 	}
 	async fetchNouns () {
-		let response = await fetch("https://raw.githubusercontent.com/dizzy-labs/FishyWords/master/nouns.txt")
+		let response = await fetch("https://raw.githubusercontent.com/dizzy-labs/FishyWords/master/assets/wordlists/nouns.txt")
 		let responseText = await response.text()
 		let nouns = responseText.split("\n");
 		//trim off trailing blank lines
